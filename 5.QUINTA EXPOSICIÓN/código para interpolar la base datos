@@ -1,0 +1,31 @@
+do i=1979,2016
+    ;Interpolación
+    j = tostring(i)
+    f = addfile("/media/yordan/MERIDIONAL/vwnd.10m."+j+".nc","r")
+    a = f->lon
+    lon2d = 360+a
+    lat2d = f->lat
+    v = f->vwnd
+    lona = fspan(255, 285, 121)
+    lata = fspan(0, 24, 97)
+    xgrd  = rcm2rgrid(lat2d,lon2d,v,lata,lona,0)
+    ;Escribir netCDF4
+    ncdf = addfile("/media/yordan/MERIDIONAL/MERIDIONAL-alt/"+j+"alt.nc" ,"c") 
+    filedimdef(ncdf,"time",-1,True)
+    ncdf->V = xgrd
+    ncdf->LON = lona
+    ncdf->LAT = lata
+    delete(j)
+    delete(f)
+    delete(a)
+    delete(lon2d)
+    delete(lat2d)
+    delete(v)
+    delete(lona)
+    delete(lata)
+    delete(xgrd)
+    delete(ncdf)
+end do
+
+
+
